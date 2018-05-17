@@ -17,7 +17,7 @@
 Name:      %{name}
 Summary:   %{summary}
 Version:   %{version}
-Release:   %{release}
+Release:   %{release1}
 License:   %{license}
 Group:     %{group}
 Source0:   %{source}
