@@ -31,11 +31,11 @@ Buildroot: %{buildroot}
 Collection Sample Scripts.
 For further explanation, see %{url}
 %prep
-%setup -q -n blndev-poc-%{version}
+%setup -q -n %{name}-%{version}
 %build
 %install
 install -d %{buildroot}%{_prefix}/blndev
-tar cf - ./%{name}/* | (cd %{buildroot}%{_prefix}/blndev-poc; tar xfp -)
+tar cf - ./%{name}/* | (cd %{buildroot}%{_prefix}/%{name}; tar xfp -)
 %post
 echo "--------------------------------------------------------"
 echo "   %{name} installed in  %{_prefix}"
