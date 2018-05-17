@@ -18,6 +18,6 @@ rpm:
 	mv ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar.gz rpmbuild/SOURCES
 	cp ${RPM_ROOT_DIR}/${RPM_ROOT_NAME}/v${OPENSHIFT_TARGET_VERSION}/${RPM_ROOT_NAME}.spec rpmbuild/SPECS
 	chgrp -R root ."
-        rpmbuild --define '_topdir %(pwd)/rpmbuild' --define 'version ${RPM_TARGET_VERSION}' --define 'release ${BUILD_NUMBER}' -ba rpmbuild/SPECS/${RPM_ROOT_NAME}.spec
-        echo "Build stage finished!"
+	rpmbuild --define '_topdir %(pwd)/rpmbuild' --define 'version ${RPM_TARGET_VERSION}' --define 'release ${BUILD_NUMBER}' -ba rpmbuild/SPECS/${RPM_ROOT_NAME}.spec
+	echo "Build stage finished!"
 	
