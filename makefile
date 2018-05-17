@@ -9,15 +9,17 @@ info:
 	echo "POC"
 
 rpm:
-	rm -rf ${DIRECTORY_ROOT}-${RPM_TARGET_VERSION}/${RPM_ROOT_NAME}@tmp
+	rm -rf ${RPM_ROOT_DIR} #maybe replace that with a srcbuild/ dir or dist/ in the local folder
 	mkdir ${RPM_ROOT_DIR}
 	cp src/* ${RPM_ROOT_DIR} --recursive
+	# now the build and test should run
+	# remove all of the temporary stuff and files not to be published
 	tar cf ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar ${RPM_ROOT_DIR} || [[ \\$? -eq 1 ]]
 	gzip ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar
 	mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	mv ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar.gz rpmbuild/SOURCES
-	cp ${RPM_ROOT_DIR}/${RPM_ROOT_NAME}/v${OPENSHIFT_TARGET_VERSION}/${RPM_ROOT_NAME}.spec rpmbuild/SPECS
-	chgrp -R root ."
+	cp rpm.spec rpmbuild/SPECS
+	#chgrp -R root rpmbuild/
 	rpmbuild --define '_topdir %(pwd)/rpmbuild' --define 'version ${RPM_TARGET_VERSION}' --define 'release ${BUILD_NUMBER}' -ba rpmbuild/SPECS/${RPM_ROOT_NAME}.spec
-	echo "Build stage finished!"
+	PM_ROOT_DIR stage finished!"
 	
