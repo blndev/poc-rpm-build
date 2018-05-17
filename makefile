@@ -18,7 +18,7 @@ rpm:
 	gzip ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar
 	mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	mv ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar.gz rpmbuild/SOURCES
-	cp rpm.spec rpmbuild/SPECS
+	cp ${RPM_ROOT_NAME}.spec rpmbuild/SPECS
 	#chgrp -R root rpmbuild/
 	rpmbuild --define '_topdir %(pwd)/rpmbuild' --define 'version ${RPM_TARGET_VERSION}' --define 'release ${BUILD_NUMBER}' -ba rpmbuild/SPECS/${RPM_ROOT_NAME}.spec
 	PM_ROOT_DIR stage finished!"

@@ -10,8 +10,8 @@
 %define url       https://github.com/blndev/poc-rpm-build
 %define vendor    github - blndev
 %define packager  blndev
-%define buildroot %{_tmppath}/rpm-build-blndev-poc
-%define projectroot ./rpm-projectroot
+%define buildroot %{_tmppath}/buildroot
+#%define projectroot ./rpm-projectroot
 %define _prefix   /opt
 
 Name:      %{name}
