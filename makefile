@@ -22,5 +22,4 @@ rpm:
 	cp ${RPM_ROOT_NAME}.spec rpmbuild/SPECS
 	#chgrp -R root rpmbuild/
 	rpmbuild --define '_topdir %(pwd)/rpmbuild' --define 'name ${RPM_ROOT_NAME}' --define 'version ${RPM_TARGET_VERSION}' --define 'release ${BUILD_NUMBER}' -ba rpmbuild/SPECS/${RPM_ROOT_NAME}.spec
-	PM_ROOT_DIR stage finished!"
 	
