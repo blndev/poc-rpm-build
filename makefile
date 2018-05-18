@@ -2,19 +2,19 @@ VERSION = 1.0
 VERSION_MINOR = dev
 RPM_ROOT_NAME = blndev-poc
 RPM_TARGET_VERSION = ${VERSION}.${VERSION_MINOR}
-DIRECTORY_ROOT = /tmp/$(RPM_ROOT_NAME)
-RPM_ROOT_DIR = ${DIRECTORY_ROOT}-${RPM_TARGET_VERSION}
+DIRECTORY_ROOT = dist
+RPM_ROOT_DIR = ${DIRECTORY_ROOT}/$(RPM_ROOT_NAME)-${RPM_TARGET_VERSION}
 
 info:
 	echo "POC"
 
 rpm:
 	rm -rf ${RPM_ROOT_DIR} #maybe replace that with a srcbuild/ dir or dist/ in the local folder
-	mkdir ${RPM_ROOT_DIR}
+	mkdir --parents ${RPM_ROOT_DIR}
 	cp src/* ${RPM_ROOT_DIR} --recursive
 	# now the build and test should run
 	# remove all of the temporary stuff and files not to be published
-	tar cf ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar ${RPM_ROOT_DIR} || [[ \\$? -eq 1 ]]
+	tar -C ${DIRECTORY_ROOT} -cf ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION} || [[ \\$? -eq 1 ]]
 	gzip ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar
 	mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	mv ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}.tar.gz rpmbuild/SOURCES
