@@ -37,7 +37,9 @@ echo "Version: %{version}"
 %build
 %install
 install -d %{buildroot}%{_prefix}
-tar cf - ./%{name}/* | (cd %{buildroot}%{_prefix}/%{name}; tar xfp -)
+echo "directories created"
+cp %{_topdir}/BUILD/* %{buildroot}%{_prefix} --recursive
+#tar cf - ./%{name}/* | (cd %{buildroot}%{_prefix}/%{name}; tar xfp -)
 %post
 echo "--------------------------------------------------------"
 echo "   %{name} installed in  %{_prefix}"
