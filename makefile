@@ -29,12 +29,12 @@ build:
 rpm: build
 	echo "starting rpm preparation"
 	# --------------------------------------------------------------------------
-	rm -rf ${RPM_ROOT_DIR} #maybe replace that with a srcbuild/ dir or dist/ in the local folder
+	rm -rf ${RPM_ROOT_DIR} 
 	mkdir --parents ${RPM_ROOT_DIR}
-	rm -rf ${DIST_DIR} #maybe replace that with a srcbuild/ dir or dist/ in the local folder
+	rm -rf ${DIST_DIR}
 	mkdir --parents ${DIST_DIR}
 	# run the build and copy the build result to ${RPM_ROOT_DIR}
-	# in this sample there is no build so we just copy the sources for distribution
+	# in this sample is no build so we just copy the sources for distribution
 	cp src/* ${RPM_ROOT_DIR} --recursive
 	cp LICENSE ${RPM_ROOT_DIR}
 	# any other file that needs to be packaged?
@@ -44,12 +44,20 @@ rpm: build
 	# do not change this
 	# --------------------------------------------------------------------------
 	# remove all of the temporary stuff and files not to be published
-	tar -C ${BUILD_DIR} -cf ${RPM_FULL_NAME}.tar ${RPM_FULL_NAME} || [[ \\$? -eq 1 ]]
+	tar \
+		-C ${BUILD_DIR} \
+		-cf ${RPM_FULL_NAME}.tar ${RPM_FULL_NAME} \
+		|| [[ \\$? -eq 1 ]]
 	gzip ${RPM_FULL_NAME}.tar
 	mkdir -p ${RPM_BUILD_DIR}/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	mv ${RPM_FULL_NAME}.tar.gz ${RPM_BUILD_DIR}/SOURCES
 	cp ${RPM_ROOT_NAME}.spec ${RPM_BUILD_DIR}/SPECS
-	rpmbuild --define '_topdir %(pwd)/${RPM_BUILD_DIR}' --define 'name ${RPM_ROOT_NAME}' --define 'version ${RPM_TARGET_VERSION}' --define 'release ${BUILD_NUMBER}' -ba ${RPM_BUILD_DIR}/SPECS/${RPM_ROOT_NAME}.spec
+	rpmbuild \
+		--define '_topdir %(pwd)/${RPM_BUILD_DIR}' \
+		--define 'name ${RPM_ROOT_NAME}' \
+		--define 'version ${RPM_TARGET_VERSION}' \
+		--define 'release ${BUILD_NUMBER}' \
+		-ba ${RPM_BUILD_DIR}/SPECS/${RPM_ROOT_NAME}.spec
 	# --------------------------------------------------------------------------
 	cp ${RPM_BUILD_DIR}/RPMS/**/${RPM_FULL_NAME}*.rpm ${DIST_DIR}/
 	echo "result:"
