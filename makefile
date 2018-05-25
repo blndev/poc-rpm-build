@@ -12,7 +12,7 @@ BUILD_NUMBER = 999
 
 # ------------------------------------------------------------------------------
 # fixed values, change only when required
-DIRECTORY_ROOT = dist #build directory
+DIRECTORY_ROOT =dist
 RPM_TARGET_VERSION = ${VERSION}.${VERSION_MINOR}
 RPM_FULL_NAME = ${RPM_ROOT_NAME}-${RPM_TARGET_VERSION}
 RPM_ROOT_DIR = ${DIRECTORY_ROOT}/${RPM_FULL_NAME}
