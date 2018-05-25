@@ -57,7 +57,7 @@ rpm: build
 		--define 'name ${RPM_ROOT_NAME}' \
 		--define 'version ${RPM_TARGET_VERSION}' \
 		--define 'release ${BUILD_NUMBER}' \
-		-ba ${RPM_BUILD_DIR}/SPECS/${RPM_ROOT_NAME}.spec
+		-bb ${RPM_BUILD_DIR}/SPECS/${RPM_ROOT_NAME}.spec
 	# --------------------------------------------------------------------------
 	cp ${RPM_BUILD_DIR}/RPMS/**/${RPM_FULL_NAME}*.rpm ${DIST_DIR}/
 	echo "result:"
