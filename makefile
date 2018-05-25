@@ -21,13 +21,13 @@ RPM_ROOT_DIR = ${BUILD_DIR}/${RPM_FULL_NAME}
 # ------------------------------------------------------------------------------
 
 info:
-	echo "Proof of Concept"
+	@echo "Proof of Concept.\nRun make rpm to create a package"
 
 build:
-	echo "no build step required"
+	@echo "no build step required"
 
 rpm: build
-	echo "starting rpm preparation"
+	@echo "starting rpm preparation"
 	# --------------------------------------------------------------------------
 	rm -rf ${RPM_ROOT_DIR} 
 	mkdir --parents ${RPM_ROOT_DIR}
@@ -59,6 +59,6 @@ rpm: build
 		--define 'release ${BUILD_NUMBER}' \
 		-bb ${RPM_BUILD_DIR}/SPECS/${RPM_ROOT_NAME}.spec
 	# --------------------------------------------------------------------------
-	cp ${RPM_BUILD_DIR}/RPMS/**/${RPM_FULL_NAME}*.rpm ${DIST_DIR}/
-	echo "result:"
-	ls -l ${DIST_DIR}/
+	@cp ${RPM_BUILD_DIR}/RPMS/**/${RPM_FULL_NAME}*.rpm ${DIST_DIR}/
+	@echo "done. result:"
+	@ls -l ${DIST_DIR}/
