@@ -61,4 +61,4 @@ rpm: build
 	# --------------------------------------------------------------------------
 	@cp ${RPM_BUILD_DIR}/RPMS/**/${RPM_FULL_NAME}*.rpm ${DIST_DIR}/
 	@echo "done. result:"
-	@ls -l ${DIST_DIR}/
+	@ls ${DIST_DIR}/*.rpm
