@@ -5,6 +5,8 @@ VERSION = 1
 VERSION_MINOR = 0
 
 # name of the resulting rpm and the installation folder
+# this name must fit to the spec file name 
+# reference here (line 62): -bb ${RPM_BUILD_DIR}/SPECS/${RPM_ROOT_NAME}.spec
 RPM_ROOT_NAME = blndev-poc
 
 # build number should be set by a ci pipeline, just remove it from here
