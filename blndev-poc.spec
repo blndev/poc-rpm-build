@@ -1,7 +1,8 @@
-# variables set by makefile or as env
-# %%define _topdir  /tmp/rpm
-# %define _tmppath  %{_topdir}/tmp
-# %define name      blndev-poc
+# required variables but set by makefile or as env
+# you can set them here as well, just remove the "_"
+# %_define _topdir  /tmp/rpm
+# %_define _tmppath  %{_topdir}/tmp
+# %_define name      blndev-poc
 %define debug_package %{nil}
 
 # -----------------------------------------------------------------------------
