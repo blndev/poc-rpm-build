@@ -1,20 +1,14 @@
-# required variables but set by makefile or as env
-# you can set them here as well, just remove the "_"
-# %_define _topdir  /tmp/rpm
-# %_define _tmppath  %{_topdir}/tmp
-# %_define name      blndev-poc
+# variables set by makefile or as env
 %define debug_package %{nil}
 
 # -----------------------------------------------------------------------------
 # apply your changes here
 # -----------------------------------------------------------------------------
 
-%define summary   Proof of Concept to build an RPM
 %define license   MIT
 %define group     Applications/System
-%define url       https://github.com/blndev/poc-rpm-build
-%define vendor    github - blndev
-%define packager  blndev
+%define vendor    blndev
+%define packager  Daniel
 
 # installation target directory
 %define _prefix   /opt/blndev
@@ -28,7 +22,7 @@ Requires:  grep
 # don't change this section
 # -----------------------------------------------------------------------------
 
-%define source    %{name}-%{version}.tar.gz
+%define xxsource    %{name}-%{version}.tar.gz
 %define buildroot %{_topdir}/BUILDROOT
 
 Name:      %{name}
@@ -58,12 +52,12 @@ For detailed explanation, see %{url}
 install -d %{buildroot}%{_prefix}/%{name}
 echo "directories created"
 cp %{_topdir}/BUILD/%{name}-%{version}/* %{buildroot}%{_prefix}/%{name}/ --recursive -v
-#tar cf - ./%{name}/* | (cd %{buildroot}%{_prefix}/%{name}; tar xfp -)
 
 %post
 echo "--------------------------------------------------------"
 echo "   %{name} installed in  %{_prefix}"
 echo "--------------------------------------------------------"
+# add your postinstall commands here
 
 %postun
 # your uninstall routine
