@@ -13,7 +13,7 @@ before_install:
 
 script:
   # Run script in Container
-  - sudo docker run --rm=true -v `pwd`:/source:rw peshay/centos7-rpmbuild   -c "cd /source; make rpm;"
+  - sudo docker run --rm=true -v `pwd`:/source:rw peshay/centos7-rpmbuild  /bin/bash -c "cd /source; make rpm;"
   - docker ps -a
 
 deploy:
