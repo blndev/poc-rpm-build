@@ -9,7 +9,7 @@ before_install:
   - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
   - sudo service docker restart
   - sleep 5
-  - sudo docker pull blndev/rpmbuild
+  - sudo docker pull peshay/centos7-rpmbuild
 
 script:
   # Run script in Container
@@ -20,7 +20,7 @@ script:
   #- docker start $DOCKER_CONTAINER_ID
   #- docker exec -it $DOCKER_CONTAINER_ID /bin/bash -xec "/poc-rpm-build/make rpm;"
   #- docker logs $DOCKER_CONTAINER_ID
-  - sudo docker run --rm=true -v `pwd`:/source:rw blndev/rpmbuild /bin/bash -c "cd /source; make rpm;"
+  - sudo docker run --rm=true -v `pwd`:/source:rw peshay/centos7-rpmbuild /bin/bash -c "cd /source; make rpm;"
   - docker ps -a
   #- docker stop $DOCKER_CONTAINER_ID
   #- docker rm -v $DOCKER_CONTAINER_ID
