@@ -1,27 +1,24 @@
-udo: required
+sudo: required
 env:
-  #matrix:
-  - OS_TYPE=centos OS_VERSION=6 ANSIBLE_VERSION=1.9.2
-
-branches:
-  only:
-  - master
-#  - stable
 
 services:
   - docker
-
+  
 before_install:
   - sudo apt-get update
-  - sudo apt-get upgrade lxc-docker
   - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
   - sudo service docker restart
   - sleep 5
-  - sudo docker pull weldpua2008/docker-ansible:${OS_TYPE}${OS_VERSION}_v${ANSIBLE_VERSION}
+  - sudo docker pull blndev:rpmbuild
 
 script:
- # Run tests in Container
- - sudo docker run --rm=true -v `pwd`:/ansible-apache:rw weldpua2008/docker-ansible:${OS_TYPE}${OS_VERSION}_v${ANSIBLE_VERSION} /bin/bash -c "/ansible-apache/tests/test-in-docker-image.sh ${OS_TYPE} ${OS_VERSION} ${ANSIBLE_VERSION}"
-
-notifications:
-  email: false
+  # Run script in Container
+  - docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup -v `pwd`:/poc-rpm-build:rw  blndev/rpmbuild   /usr/sbin/init
+  - DOCKER_CONTAINER_ID=$(docker ps | grep blndev | awk '{print $1}')
+  - docker logs $DOCKER_CONTAINER_ID
+  - docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash -xe /poc-rpm-build/make rpm;
+    echo -ne \"------\nEND rpm build\n\";"
+  - dock er ps -a
+  - docker stop $DOCKER_CONTAINER_ID
+  - docker rm -v $DOCKER_CONTAINER_ID
+  - make rpm
