@@ -13,10 +13,10 @@ before_install:
 
 script:
   # Run script in Container
-  - docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup -v `pwd`:/poc-rpm-build:rw  blndev/rpmbuild   /usr/sbin/init
+  - docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup -v `pwd`:/poc-rpm-build:rw  blndev/rpmbuild
   - DOCKER_CONTAINER_ID=$(docker ps | grep blndev | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
-  - docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash -xe /poc-rpm-build/make rpm;"
+  - docker exec -it $DOCKER_CONTAINER_ID /bin/bash -xec "bash -xe /poc-rpm-build/make rpm;"
   - docker ps -a
   - docker stop $DOCKER_CONTAINER_ID
   - docker rm -v $DOCKER_CONTAINER_ID
