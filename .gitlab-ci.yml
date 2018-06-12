@@ -1,0 +1,159 @@
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# gitlab build pipeline for rpm packages
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Author:     github.com/blndev
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# more details about pipelines: https://docs.gitlab.com/ee/ci/yaml/
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define the docker image to be used
+image: blndev/rpmbuild
+
+
+# variables
+variables:
+   
+# The ordering of elements in stages defines the ordering of jobs' execution
+stages:
+  - buildrpm
+  - deployrpm
+  - release
+ 
+# executed before each job
+before_script:
+  # extract semantic version out of git tag
+  # that is used to validate that the tag contains the same info as the
+  # makefile version
+  # must be in format "RELEASE-1.0.3"
+  - tagversion=( ${CI_COMMIT_TAG//-/ } )
+  - product_version="${tagversion[1]}"
+  - semver=( ${product_version//./ } )
+  - export VERSION_MAJOR="${semver[0]}"
+  - export VERSION_MINOR="${semver[1]}"
+  - export VERSION_PATCH="${semver[2]}"
+  - echo "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
+
+# executed after each job
+after_script:
+  #- rm secrets
+
+cache:
+  paths:
+  #- vendor/
+ 
+buildrpm/unstable:
+  stage: buildrpm
+  #image: blndev/rpmbuild
+  tags:
+  script:
+    - export VERSION_INFO=unstable
+    - make rpm
+  only:
+    - branches
+  except:
+    - tags
+  artifacts:
+    name: "rpm-$CI_COMMIT_REF_NAME-Build_$CI_JOB_ID"
+    paths: [dist/**]
+    when: on_success
+    expire_in: 1 mos #2 weeks
+
+# deplyoment of dev branches is a manual triggered task
+deploy/development:
+  stage: deployrpm
+  dependencies: 
+    - buildrpm/unstable
+  when: manual
+  only:
+    - branches
+  except:
+    - tags
+    - master
+  script:
+    - make deploy
+  environment:
+    name: development
+    url: "https://yourreposerver"
+
+# if there was a build on master we upload the result as "unstable"
+deploy/master:
+  stage: deployrpm
+  dependencies: 
+    - buildrpm/unstable
+  when: on_success
+  only:
+    - master
+  except:
+    - tags
+  script:
+    - make deploy
+  environment:
+    name: development
+    url: "https://yourreposerver"
+
+# creation of a git tag will trigger a release build
+buildrpm/release:
+  stage: buildrpm
+  #image: blndev/rpmbuild
+  tags:
+  script:
+    - make rpm
+  only:
+    - tags
+    - /^RELEASE-.*$/
+  except:
+    -  branches
+  artifacts:
+    name: "RELEASE-rpm-$CI_COMMIT_REF_NAME-Build_$CI_JOB_ID"
+    paths: [dist/**]
+    when: on_success
+    expire_in: 2 years
+
+# now we upload it to staging for testing purposes
+deploy/staging:
+  stage: deployrpm
+  dependencies: 
+    - buildrpm/release
+  when: on_success
+  only:
+    - tags
+    - /^RELEASE-.*$/
+  except:
+    -  branches
+  script:
+    - make deploy
+    - touch dist/deploymentinfo
+    - echo "Hello World" >> dist/deploymentinfo
+  environment:
+    name: staging
+    url: "https://yourreposerver"
+  artifacts:
+    # these artefacts containing the details of the published rpm
+    # when releasing the rpm it shold not be rebuild to these infos
+    # are required and therefore transported to the next stage
+    name: "deploy-$CI_COMMIT_REF_NAME-Build_$CI_JOB_ID"
+    paths: [dist/deploymentinfo]
+    when: on_success
+    # we keep it only 1 month, because more time should not be required to 
+    # relese
+    expire_in: 1 mos #2 weeks
+
+# releasing the staged rpm is currenty manual, but colud be automated
+# when you have automated tests
+# here we will use the same rpm
+deploy/release:
+  stage: release
+  dependencies: 
+    - buildrpm/release
+    - deploy/staging
+  when: manual
+  only:
+    - tags
+    - /^RELEASE-.*$/
+  except:
+    -  branches
+  script:
+    - make release
+  environment:
+    name: production
+    url: "https://yourreposerver"
