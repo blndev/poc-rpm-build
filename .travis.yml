@@ -16,9 +16,7 @@ script:
   - docker run --privileged -d -ti -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup -v `pwd`:/poc-rpm-build:rw  blndev/rpmbuild   /usr/sbin/init
   - DOCKER_CONTAINER_ID=$(docker ps | grep blndev | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
-  - docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash -xe /poc-rpm-build/make rpm;
-    echo -ne \"------\nEND rpm build\n\";"
-  - dock er ps -a
+  - docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash -xe /poc-rpm-build/make rpm;"
+  - docker ps -a
   - docker stop $DOCKER_CONTAINER_ID
   - docker rm -v $DOCKER_CONTAINER_ID
-  - make rpm
