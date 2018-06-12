@@ -1,5 +1,7 @@
 # RPM Build - Proof of Concept
 
+[![Build Status](https://travis-ci.org/blndev/poc-rpm-build.svg?branch=master)](https://travis-ci.org/blndev/poc-rpm-build)
+
 All details are based on http://ftp.rpm.org/max-rpm/ch-rpm-inside.html
 
 The goal of this POC is to create a more or less general approach to handle installations of script based products / utils. 
