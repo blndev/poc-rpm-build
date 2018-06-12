@@ -45,12 +45,21 @@ For detailed explanation, see %{url}
 
 %prep
 # add -q to setup to have no verbose output
+# the setup setp will extract the tar.gz to BUILD/
 %setup -n %{name}-%{version}
+
 %build
+# now there can be a build step like compile and test:
+# make %{_topdir}/BUILD/%{name}-%{version}/makefile build
+# but in this sample we just packaging all source files
+# our source.tar.gz is already packaged that only the sources are contained
 
 %install
+# create target folders
 install -d %{buildroot}%{_prefix}/%{name}
 echo "directories created"
+# just copy all files from build dir to target
+# for compiled products you should copy the build result instead
 cp %{_topdir}/BUILD/%{name}-%{version}/* %{buildroot}%{_prefix}/%{name}/ --recursive -v
 
 %post
