@@ -1,16 +1,16 @@
 
-# Major an Minor Version of your RPM except a Gitlab Pipeline with Tags is used
-# Env. VERSION_MAJOR, VERSION_MINOR and VERSION_PATCH will be compared with
-# this entries.
-# that is useful to make sure that a git tag like "Release-2.1.4" fits to the
-# real builded version
+# Major and Minor Version of your RPM, except a Gitlab Pipeline with Tags is used.
+# Environment variables VERSION_MAJOR, VERSION_MINOR and VERSION_PATCH will be compared
+#  with these settings.
+# Doing so is useful to make sure that a git tag like "Release-2.1.4" fits with the
+#  real built version.
 RPM_MAJOR = 2
 RPM_MINOR = 1
 RPM_PATCH = 4
 
 
-# name of the resulting rpm and the installation folder
-# should fit to the name of spec file or you must modify RPM_SPEC_FILE
+# The name of the resulting rpm and the installation folder.  It should fit to the
+#  name of the spec file, or else you must modify RPM_SPEC_FILE
 RPM_PACKAGE_NAME 	  = blndev-poc
 RPM_PACKAGE_SUMMARY   = Proof of Concept to build an RPM
 HELP_URL	  		  = https://github.com/blndev
@@ -21,12 +21,12 @@ HELP_URL	  		  = https://github.com/blndev
 # ------------------------------------------------------------------------------
 
 
-# relative folder path with will be packaged. 
+# relative folder path which will be packaged. 
 FOLDER_TO_DEPLOY = src
 
 
 # ------------------------------------------------------------------------------
-# fixed values, change only when required
+# fixed values; change only when required
 BUILD_DIR = .tmp
 DIST_DIR = dist
 RPM_SPEC_FILE = ${RPM_PACKAGE_NAME}.spec
@@ -42,14 +42,14 @@ info:
 
 compareVersion:
 # ------------------------------------------------------------------------------
-# compare ci infos e.g. git tag with makefile settings
+# compare ci info,  e.g. git tag with makefile settings
 ifndef VERSION_MAJOR
 define VERSION_MAJOR 
 ${RPM_MAJOR}
 endef
 else
 ifneq (${VERSION_MAJOR}, ${RPM_MAJOR})
-	$(error Major Version of Tag does not fit to makefile Version)
+	$(error Major Version of Tag does not fit with makefile Version)
 endif
 endif
 
@@ -59,7 +59,7 @@ ${RPM_MINOR}
 endef
 else
 ifneq (${VERSION_MINOR}, ${RPM_MINOR})
-	$(error Minor Version of Tag does not fit to makefile Version)
+	$(error Minor Version of Tag does not fit with makefile Version)
 endif
 endif
 
@@ -69,10 +69,10 @@ ${RPM_PATCH}
 endef
 else
 ifneq (${VERSION_PATCH}, ${RPM_PATCH})
-$(error Patch / Release Version of Tag does not fit to makefile Version)
+$(error Patch / Release Version of Tag does not fit with makefile Version)
 endif
 endif
-#apply extensions like beta or unstable if defined
+# apply extensions like 'beta' or 'unstable', if so defined
 ifdef VERSION_INFO
 VERSION_PATCH:=${VERSION_PATCH}_${VERSION_INFO}
 endif
@@ -87,8 +87,8 @@ rpm: build
 	mkdir --parents ${RPM_TAR_SOURCE}
 	rm -rf ${DIST_DIR}
 	mkdir --parents ${DIST_DIR}
-	# run the build and copy the build result to ${RPM_TAR_SOURCE}
-	# in this sample is no build so we just copy the sources for distribution
+	# run the build and copy the build result to ${RPM_TAR_SOURCE}.
+	# in this sample there is no build so we just copy the source files for distribution
 	cp ${FOLDER_TO_DEPLOY}/* ${RPM_TAR_SOURCE} --recursive
 	cp LICENSE ${RPM_TAR_SOURCE}
 	cp changelog ${RPM_TAR_SOURCE}
